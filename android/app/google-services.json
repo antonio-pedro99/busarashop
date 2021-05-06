@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "427452341171",
+    "firebase_url": "https://baby-name-bebea.firebaseio.com",
+    "project_id": "baby-name-bebea",
+    "storage_bucket": "baby-name-bebea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427452341171:android:c31493c84e10db8df309c6",
+        "android_client_info": {
+          "package_name": "com.example.baby_names"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427452341171-r64elnj1iopku7f4lrm2i6uotf3tpuct.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBybc7kYd-ynfhuGtBATL4E2FvqJ988zUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427452341171-r64elnj1iopku7f4lrm2i6uotf3tpuct.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427452341171:android:c374d0eb28845f34f309c6",
+        "android_client_info": {
+          "package_name": "com.mawa.busara_shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427452341171-r64elnj1iopku7f4lrm2i6uotf3tpuct.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBybc7kYd-ynfhuGtBATL4E2FvqJ988zUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427452341171-r64elnj1iopku7f4lrm2i6uotf3tpuct.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
