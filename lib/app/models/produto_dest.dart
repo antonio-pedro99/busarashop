@@ -15,9 +15,9 @@ class DestProduto {
 
   DestProduto.fromDocument(DocumentSnapshot snapshot) {
     pid = snapshot.id.toString();
-    nome = snapshot.data()["nome"];
-    categoria = snapshot.data()["categoria"];
-    preco = snapshot.data()["preco"];
+    nome = (snapshot.data() as Map<String, dynamic>)["nome"];
+    categoria = (snapshot.data() as Map<String, dynamic>)["categoria"];
+    preco = (snapshot.data() as Map<String, dynamic>)["preco"];
   }
 
   Map<String, dynamic> toMap() {

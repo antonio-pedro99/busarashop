@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
                 theme: ThemeData(
                     primarySwatch: Colors.green,
                     visualDensity: VisualDensity.adaptivePlatformDensity,
-                    textTheme: GoogleFonts.aBeeZeeTextTheme(
-                        Theme.of(context).textTheme)),
+                   textTheme: GoogleFonts.aBeeZeeTextTheme(
+                       Theme.of(context).textTheme)),
                 home: MyHome(),
               ),
             );

@@ -10,9 +10,9 @@ class PedidosTile extends StatelessWidget {
 
   String _buildPedidoDesc(DocumentSnapshot snapshot) {
     String texto = "Breve Descrição\n";
-    double total = snapshot.data()["total"];
-    double entrega = snapshot.data()["entrega"];
-    for (LinkedHashMap p in snapshot.data()['produtos']) {
+    double total = (snapshot.data() as Map<String, dynamic>)["total"];
+    double entrega = (snapshot.data() as Map<String, dynamic>)["entrega"];
+    for (LinkedHashMap p in (snapshot.data() as Map<String, dynamic>)['produtos']) {
       var tipo = p["produto"]["eLiquido"];
       String unidade = p["produto"]["eLiquido"] == true ? "UN" : "Kg";
       print(tipo);
@@ -106,7 +106,7 @@ class PedidosTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            "Data: " + snapshot.data.data()['data'],
+                            "Data: " + (snapshot.data.data() as Map<String, dynamic>)['data'],
                             style: TextStyle(fontSize: 14.0),
                           ),
                           SizedBox(
@@ -125,28 +125,28 @@ class PedidosTile extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               _buildCircle("Preparação", Icons.access_time,
-                                  snapshot.data.data()["status"], 1, context),
+                                  (snapshot.data.data() as Map<String, dynamic>)["status"], 1, context),
                               Container(
                                 height: 20,
                                 width: 1.0,
                                 color: Colors.grey[200],
                               ),
                               _buildCircle("Pedido Aceite", Icons.access_time,
-                                  snapshot.data.data()["status"], 2, context),
+                                  (snapshot.data.data() as Map<String, dynamic>)["status"], 2, context),
                               Container(
                                 height: 20,
                                 width: 1.0,
                                 color: Colors.grey[200],
                               ),
                               _buildCircle("Transporte", Icons.time_to_leave,
-                                  snapshot.data.data()["status"], 3, context),
+                                  (snapshot.data.data() as Map<String, dynamic>)["status"], 3, context),
                               Container(
                                 height: 20,
                                 width: 1.0,
                                 color: Colors.grey[200],
                               ),
                               _buildCircle("Entrega", Icons.assessment,
-                                  snapshot.data.data()["status"], 4, context),
+                                  (snapshot.data.data() as Map<String, dynamic>)["status"], 4, context),
                             ],
                           )
                         ],
