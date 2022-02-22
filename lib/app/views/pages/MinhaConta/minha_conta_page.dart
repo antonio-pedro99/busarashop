@@ -71,13 +71,13 @@ class _MinhaContaPageState extends State<MinhaContaPage> {
                                                   content: Text(
                                                       "Desejas Terminar Sessão?"),
                                                   actions: [
-                                                    FlatButton(
+                                                    OutlinedButton(
                                                         onPressed: () {
                                                           Navigator.pop(
                                                               context);
                                                         },
                                                         child: Text("Não")),
-                                                    FlatButton(
+                                                    OutlinedButton(
                                                         onPressed: () {
                                                           UserModel.of(context)
                                                               .fazerLogout();
@@ -127,7 +127,8 @@ class _MinhaContaPageState extends State<MinhaContaPage> {
                                   BorderRadius.all(Radius.circular(15)),
                               borderSide: BorderSide.none),
                           child: Container(
-                            height: 150,
+                            height: 120,
+                            color: Colors.white,
                             padding: EdgeInsets.all(10),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -148,7 +149,7 @@ class _MinhaContaPageState extends State<MinhaContaPage> {
                                         padding: EdgeInsets.all(10),
                                         child: DefaultTextStyle(
                                           style: TextStyle(
-                                            fontSize: 20,
+                                            fontSize: 16,
                                           ),
                                           child: Column(
                                             crossAxisAlignment:
@@ -178,38 +179,15 @@ class _MinhaContaPageState extends State<MinhaContaPage> {
                                         ))
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 7,
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  height: 1.0,
-                                  color: Colors.grey[200],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Data de Criação",
-                                      style: TextStyle(
-                                          color: Colors.green[300],
-                                          fontSize: 18),
-                                    ),
-                                    Text(model.estaLogado() ? "" : "",
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18))
-                                  ],
-                                )
                               ],
                             ),
                           ),
                         )
                       ],
                     )),
+              ),
+              SizedBox(
+                height: 25,
               ),
               Card(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 30),

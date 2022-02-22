@@ -12,7 +12,7 @@ import 'package:scoped_model/scoped_model.dart';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-   // FlutterStatusbarcolor.setStatusBarColor(Colors.green);
+    // FlutterStatusbarcolor.setStatusBarColor(Colors.green);
 
     return ScopedModel<UserModel>(
         model: UserModel(),
@@ -23,10 +23,11 @@ class MyApp extends StatelessWidget {
               child: MaterialApp(
                 debugShowCheckedModeBanner: false,
                 theme: ThemeData(
+                    scaffoldBackgroundColor: Colors.white,
                     primarySwatch: Colors.green,
                     visualDensity: VisualDensity.adaptivePlatformDensity,
-                   textTheme: GoogleFonts.aBeeZeeTextTheme(
-                       Theme.of(context).textTheme)),
+                    textTheme: GoogleFonts.aBeeZeeTextTheme(
+                        Theme.of(context).textTheme)),
                 home: MyHome(),
               ),
             );

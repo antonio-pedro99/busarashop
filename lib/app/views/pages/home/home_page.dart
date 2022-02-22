@@ -3,8 +3,8 @@ import 'package:baby_names/app/models/produto_dest.dart';
 import 'package:baby_names/app/models/produtos.dart';
 import 'package:baby_names/app/models/record.dart';
 import 'package:baby_names/app/models/scopedmodels/user_model.dart';
+import 'package:baby_names/app/views/pages/produto_details.dart/produtos_tile.dart';
 import 'package:baby_names/app/views/pages/produto_screen/produto_screen.dart';
-import 'package:baby_names/app/views/tiles/destTile.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -52,57 +52,62 @@ class _MyHomePageState extends State<MyHomePage> {
       String endereco = model.userData["endereco"];
       if (model.estaCarregando) {
         return Scaffold(
-          backgroundColor: Colors.white,
           body: Center(child: CircularProgressIndicator()),
         );
       } else {
         return Scaffold(
-          backgroundColor: Colors.white,
-          body: visorOrintacao == Orientation.portrait
-              ? Padding(
-                  padding: EdgeInsets.all(size.aspectRatio * 5),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 15),
-                        height: size.height / 8,
-                        padding: EdgeInsets.only(top: 20),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              size: 30,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Receber em:",
-                                  style: TextStyle(
-                                      color: Colors.grey[500], fontSize: 18),
-                                ),
-                                SizedBox(
-                                    width: size.width - 80,
-                                    child: Text(
-                                        model.estaLogado() && endereco != null
-                                            ? endereco
-                                            : "Seu Endereço vai aparecer aqui após o login",
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold)))
-                              ],
-                            )
-                          ],
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                floating: true,
+                pinned: true,
+                snap: false,
+                stretch: true,
+                elevation: 0,
+                toolbarHeight: 85,
+                backgroundColor: Colors.white,
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.location_on,
+                      size: 30,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Receber em:",
+                          style:
+                              TextStyle(color: Colors.grey[500], fontSize: 15),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                        Text(
+                            model.estaLogado() && endereco != null
+                                ? endereco
+                                : "Precisas fazer login",
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold))
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                SafeArea(
+                    child: Container(
+                  padding: EdgeInsets.only(left: 2, right: 2),
+                  height: size.height,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
                       Container(
                         height: size.height / 4,
                         padding: EdgeInsets.only(left: 8, right: 8),
@@ -126,18 +131,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: _buildListOferta(
                                         snapshot.data.docs, context, size),
                                   ),
-                                  Row(
-                                    children: [],
-                                  )
                                 ],
                               );
                             }
                           },
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 10),
+                      //build category list
                       Expanded(
                         child: Container(
                             height: size.height / 4,
@@ -146,96 +147,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       )
                     ],
                   ),
-                )
-              : Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Container(
-                    height: size.height,
-                    child: ListView(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 0),
-                          height: size.height / 8,
-                          padding: EdgeInsets.only(top: 2),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                                size: 30,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Receber em:",
-                                    style: TextStyle(
-                                        color: Colors.grey[500], fontSize: 18),
-                                  ),
-                                  SizedBox(
-                                      width: size.width - 100,
-                                      child: Text(
-                                          model.estaLogado() && endereco != null
-                                              ? endereco
-                                              : "Seu Endereço vai aparecer aqui após o login",
-                                          style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold)))
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 8, right: 8),
-                          child: StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection("ofertas")
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              } else {
-                                return Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    SizedBox(
-                                      height: size.height - 40,
-                                      child: _buildListOferta(
-                                          snapshot.data.docs, context, size),
-                                    ),
-                                    Row(
-                                      children: [],
-                                    )
-                                  ],
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Expanded(
-                          child: Container(
-                              height: size.height,
-                              padding: EdgeInsets.only(left: 8, right: 8),
-                              child: _buildBody(context, size)),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                ))
+              ]))
+            ],
+          ),
         );
       }
     });
@@ -280,18 +195,14 @@ Widget _buildBody(BuildContext context, Size size) {
                           color: Colors.black54,
                           fontSize: 18,
                           fontWeight: FontWeight.bold)),
-                  // Expanded(
-                  //      child: FutureBuilder<QuerySnapshot>(
-                  //    future: FirebaseFirestore.instance.collection('produtos').doc('frutas').collection()
-                  //    builder: (context, snapshot) {
-                  //      if (!snapshot.hasData) {
-                  //        return Center(
-                  //          child: Center(child: CircularProgressIndicator()),
-                  //        );
-                  //      }
-                  //      return _builListVerticalOferta(snapshot.data.docs, context, size);
-                  //    },
-                  //  ))
+                  Expanded(
+                      child: Container(
+                    child: ListView(
+                      children: [
+                        ProdutoTile(Produto())
+                      ],
+                    ),
+                  ))
                 ],
               ),
             );
