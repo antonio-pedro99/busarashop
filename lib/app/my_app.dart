@@ -6,7 +6,6 @@ import 'package:baby_names/app/views/pages/carrinhoPage/carrinho_page.dart';
 import 'package:baby_names/app/views/pages/home/home_page.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:baby_names/app/views/pages/login_page.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
