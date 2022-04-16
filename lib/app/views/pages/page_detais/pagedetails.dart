@@ -140,40 +140,45 @@ class _PageDetailsState extends State<PageDetails> {
                           } else {
                             showDialog(
                                 context: context,
-                                child: AlertDialog(
-                                  content: Text(
-                                      "Este Produto já encontra-se no carrinho, incremente somente a quantidade!"),
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text(
+                                        "Este Produto já encontra-se no carrinho, incremente somente a quantidade!"),
+                                    actions: [
+                                      OutlinedButton(
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return PageLogin();
+                                            }));
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text("Iniciar Sessão"))
+                                    ],
+                                  );
+                                });
+                          }
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  content:
+                                      Text("Deves iniciar sessão primeiro!"),
                                   actions: [
-                                    FlatButton(
+                                    OutlinedButton(
                                         onPressed: () {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) {
                                             return PageLogin();
                                           }));
-                                          Navigator.of(context).pop();
                                         },
                                         child: Text("Iniciar Sessão"))
                                   ],
-                                ));
-                          }
-                        } else {
-                          showDialog(
-                              context: context,
-                              child: AlertDialog(
-                                content: Text("Deves iniciar sessão primeiro!"),
-                                actions: [
-                                  FlatButton(
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                          return PageLogin();
-                                        }));
-                                      },
-                                      child: Text("Iniciar Sessão"))
-                                ],
-                              ));
+                                );
+                              });
                         }
                       });
                     },

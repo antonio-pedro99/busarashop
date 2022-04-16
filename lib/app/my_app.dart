@@ -4,9 +4,7 @@ import 'package:baby_names/app/views/pages/MeusPedidos/meus_pedidos_page.dart';
 import 'package:baby_names/app/views/pages/MinhaConta/minha_conta_page.dart';
 import 'package:baby_names/app/views/pages/carrinhoPage/carrinho_page.dart';
 import 'package:baby_names/app/views/pages/home/home_page.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:baby_names/app/views/pages/login_page.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -14,7 +12,7 @@ import 'package:scoped_model/scoped_model.dart';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarColor(Colors.green);
+   // FlutterStatusbarcolor.setStatusBarColor(Colors.green);
 
     return ScopedModel<UserModel>(
         model: UserModel(),
@@ -27,8 +25,8 @@ class MyApp extends StatelessWidget {
                 theme: ThemeData(
                     primarySwatch: Colors.green,
                     visualDensity: VisualDensity.adaptivePlatformDensity,
-                    textTheme: GoogleFonts.aBeeZeeTextTheme(
-                        Theme.of(context).textTheme)),
+                   textTheme: GoogleFonts.aBeeZeeTextTheme(
+                       Theme.of(context).textTheme)),
                 home: MyHome(),
               ),
             );
