@@ -236,7 +236,7 @@ class _MinhaContaPageState extends State<MinhaContaPage> {
                                               ),
                                             ),
                                             actions: [
-                                              FlatButton(
+                                              TextButton(
                                                   onPressed: () {
                                                     Navigator.pop(context);
                                                   },
