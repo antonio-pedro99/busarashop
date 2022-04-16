@@ -12,8 +12,6 @@ import 'package:scoped_model/scoped_model.dart';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-   // FlutterStatusbarcolor.setStatusBarColor(Colors.green);
-
     return ScopedModel<UserModel>(
         model: UserModel(),
         child: ScopedModelDescendant<UserModel>(
