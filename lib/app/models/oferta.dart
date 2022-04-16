@@ -8,8 +8,8 @@ class Oferta {
   Oferta();
 
   Oferta.fromSnapshot(DocumentSnapshot snapshot) {
-    codigos = (snapshot.data() as Map<String, dynamic>)["codigo"];
-    capa = (snapshot.data() as Map<String, dynamic>)["capa"];
-    descricao = (snapshot.data() as Map<String, dynamic>)["descricao"];
+    codigos = (snapshot.data())["codigo"];
+    capa = (snapshot.data())["capa"];
+    descricao = (snapshot.data())["descricao"];
   }
 }

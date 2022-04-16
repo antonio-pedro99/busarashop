@@ -41,13 +41,13 @@ class Produto {
 
   Produto.fromsnapshot(DocumentSnapshot snapshot) {
     id = snapshot.id;
-    nome = (snapshot.data() as Map<String, dynamic>)['nome'];
-    preco = (snapshot.data() as Map<String, dynamic>)['preco'] + 0.0;
-    peso = (snapshot.data() as Map<String, dynamic>)['peso'] + 0.0;
-    images = (snapshot.data() as Map<String, dynamic>)['images'];
-    descricao = (snapshot.data() as Map<String, dynamic>)['descricao'];
-    categoria = (snapshot.data() as Map<String, dynamic>)['categoria'];
-    eLiquido = (snapshot.data() as Map<String, dynamic>)['eLiquido'];
+    nome = (snapshot.data())['nome'];
+    preco = (snapshot.data())['preco'] + 0.0;
+    peso = (snapshot.data())['peso'] + 0.0;
+    images = (snapshot.data())['images'];
+    descricao = (snapshot.data())['descricao'];
+    categoria = (snapshot.data())['categoria'];
+    eLiquido = (snapshot.data())['eLiquido'];
   }
 
   Map<String, dynamic> toResumeMap() {
