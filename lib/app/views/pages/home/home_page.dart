@@ -1,15 +1,17 @@
+import 'dart:async';
+
 import 'package:baby_names/app/models/oferta.dart';
-import 'package:baby_names/app/models/produto_dest.dart';
 import 'package:baby_names/app/models/produtos.dart';
 import 'package:baby_names/app/models/record.dart';
 import 'package:baby_names/app/models/scopedmodels/user_model.dart';
-import 'package:baby_names/app/views/pages/produto_screen/produto_screen.dart';
-import 'package:baby_names/app/views/tiles/destTile.dart';
+import 'package:baby_names/app/views/pages/produto_details.dart/produtos_tile.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scoped_model/scoped_model.dart';
+
+import '../produto_screen/produto_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.titulo}) : super(key: key);
@@ -22,6 +24,14 @@ class _MyHomePageState extends State<MyHomePage> {
   DocumentSnapshot snapshot;
   bool iniciado = false;
   bool temErro = false;
+  bool flag = false;
+
+  StreamSubscription streamSubscription;
+
+  List<DocumentSnapshot> todosProductos = [];
+
+  CollectionReference collectionReference =
+      FirebaseFirestore.instance.collection("produtos");
 
   void iniciarFireBase() async {
     try {
@@ -36,10 +46,40 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  carregarFeed(UserModel userModel) {
+    collectionReference.snapshots().listen((event) {
+      setState(() {
+        event.docs.forEach((element) {
+          element.reference.collection("items").snapshots().listen((event) {
+            event.docs.forEach((element) {
+              FirebaseFirestore.instance
+                  .doc("users")
+                  .collection(userModel.meu_user.uid)
+                  .doc("feeds")
+                  .set({"feeds": event.docs});
+            });
+          });
+        });
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     iniciarFireBase();
+
+    streamSubscription = collectionReference.snapshots().listen((event) {
+      setState(() {
+        event.docs.forEach((element) {
+          element.reference.collection("items").snapshots().listen((event) {
+            event.docs.forEach((element) {
+              todosProductos.add(element);
+            });
+          });
+        });
+      });
+    });
   }
 
   @override
@@ -51,60 +91,65 @@ class _MyHomePageState extends State<MyHomePage> {
     return ScopedModelDescendant<UserModel>(builder: (context, child, model) {
       String endereco = model.userData["endereco"];
       if (model.estaCarregando) {
+        flag = false;
         return Scaffold(
-          backgroundColor: Colors.white,
           body: Center(child: CircularProgressIndicator()),
         );
       } else {
         return Scaffold(
-          backgroundColor: Colors.white,
-          body: visorOrintacao == Orientation.portrait
-              ? Padding(
-                  padding: EdgeInsets.all(size.aspectRatio * 5),
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                floating: true,
+                pinned: true,
+                snap: false,
+                stretch: true,
+                elevation: 0,
+                toolbarHeight: 85,
+                backgroundColor: Colors.white,
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.location_on,
+                      size: 30,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Receber em:",
+                          style:
+                              TextStyle(color: Colors.grey[500], fontSize: 15),
+                        ),
+                        Text(
+                            model.estaLogado() && endereco != null
+                                ? endereco
+                                : "Precisas fazer login",
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold))
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                SafeArea(
+                    child: Container(
+                  padding: EdgeInsets.only(left: 2, right: 2),
+                  height: size.height,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(top: 15),
-                        height: size.height / 8,
-                        padding: EdgeInsets.only(top: 20),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              size: 30,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Receber em:",
-                                  style: TextStyle(
-                                      color: Colors.grey[500], fontSize: 18),
-                                ),
-                                SizedBox(
-                                    width: size.width - 80,
-                                    child: Text(
-                                        model.estaLogado() && endereco != null
-                                            ? endereco
-                                            : "Seu Endereço vai aparecer aqui após o login",
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold)))
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: size.height / 4,
                         padding: EdgeInsets.only(left: 8, right: 8),
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
@@ -126,116 +171,56 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: _buildListOferta(
                                         snapshot.data.docs, context, size),
                                   ),
-                                  Row(
-                                    children: [],
-                                  )
                                 ],
                               );
                             }
                           },
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 15),
+                      //build category list
+
+                      Padding(
+                          padding: EdgeInsets.only(left: 8, right: 8),
+                          child: Text("Categorias",
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold))),
+
+                      _buildBody(context, size),
+
+                      SizedBox(height: 15),
+
+                      Padding(
+                          padding: EdgeInsets.only(left: 8, right: 8),
+                          child: Text("Para si",
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold))),
+                      SizedBox(height: 15),
                       Expanded(
-                        child: Container(
-                            height: size.height / 4,
-                            padding: EdgeInsets.only(left: 8, right: 8),
-                            child: _buildBody(context, size)),
-                      )
+                          child: Container(
+                        child: GridView.builder(
+                            itemCount: todosProductos.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 2.0,
+                                    crossAxisSpacing: 2.0,
+                                    childAspectRatio: 0.65),
+                            itemBuilder: (context, index) {
+                              return ProdutoTile((Produto.fromsnapshot(
+                                  todosProductos[index])));
+                            }),
+                      ))
                     ],
                   ),
-                )
-              : Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Container(
-                    height: size.height,
-                    child: ListView(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 0),
-                          height: size.height / 8,
-                          padding: EdgeInsets.only(top: 2),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                                size: 30,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Receber em:",
-                                    style: TextStyle(
-                                        color: Colors.grey[500], fontSize: 18),
-                                  ),
-                                  SizedBox(
-                                      width: size.width - 100,
-                                      child: Text(
-                                          model.estaLogado() && endereco != null
-                                              ? endereco
-                                              : "Seu Endereço vai aparecer aqui após o login",
-                                          style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold)))
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 8, right: 8),
-                          child: StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection("ofertas")
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              } else {
-                                return Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    SizedBox(
-                                      height: size.height - 40,
-                                      child: _buildListOferta(
-                                          snapshot.data.docs, context, size),
-                                    ),
-                                    Row(
-                                      children: [],
-                                    )
-                                  ],
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Expanded(
-                          child: Container(
-                              height: size.height,
-                              padding: EdgeInsets.only(left: 8, right: 8),
-                              child: _buildBody(context, size)),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                ))
+              ]))
+            ],
+          ),
         );
       }
     });
@@ -247,7 +232,7 @@ Widget _buildBody(BuildContext context, Size size) {
   var or = MediaQuery.of(context).orientation;
   return Container(
     padding: EdgeInsets.zero,
-    height: or == Orientation.portrait ? size.height : 500,
+    height: or == Orientation.landscape ? size.height : null,
     width: size.width,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -260,38 +245,14 @@ Widget _buildBody(BuildContext context, Size size) {
               return Container(
                   alignment: Alignment.center,
                   child: CircularProgressIndicator());
-
             return Container(
-              height: 200,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Categorias",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold)),
                   Container(
                     height: 110,
                     child: _buildListCategory(context, snapshot.data.docs),
                   ),
-                  Text("Para si",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold)),
-                  // Expanded(
-                  //      child: FutureBuilder<QuerySnapshot>(
-                  //    future: FirebaseFirestore.instance.collection('produtos').doc('frutas').collection()
-                  //    builder: (context, snapshot) {
-                  //      if (!snapshot.hasData) {
-                  //        return Center(
-                  //          child: Center(child: CircularProgressIndicator()),
-                  //        );
-                  //      }
-                  //      return _builListVerticalOferta(snapshot.data.docs, context, size);
-                  //    },
-                  //  ))
                 ],
               ),
             );

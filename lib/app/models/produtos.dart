@@ -12,6 +12,16 @@ class Produto {
 
   DocumentReference reference;
 
+  Produto(
+      {this.nome,
+      this.preco,
+      this.peso,
+      this.descricao,
+      this.categoria,
+      this.images,
+      this.id,
+      this.eLiquido});
+      
   Produto.fromMap(Map<String, dynamic> snapshot, {this.reference})
       : assert(snapshot['id'] = !null),
         assert(snapshot['nome'] = !null),
