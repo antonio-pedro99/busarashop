@@ -1,15 +1,17 @@
+import 'dart:async';
+
 import 'package:baby_names/app/models/oferta.dart';
-import 'package:baby_names/app/models/produto_dest.dart';
 import 'package:baby_names/app/models/produtos.dart';
 import 'package:baby_names/app/models/record.dart';
 import 'package:baby_names/app/models/scopedmodels/user_model.dart';
 import 'package:baby_names/app/views/pages/produto_details.dart/produtos_tile.dart';
-import 'package:baby_names/app/views/pages/produto_screen/produto_screen.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scoped_model/scoped_model.dart';
+
+import '../produto_screen/produto_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.titulo}) : super(key: key);
@@ -22,6 +24,14 @@ class _MyHomePageState extends State<MyHomePage> {
   DocumentSnapshot snapshot;
   bool iniciado = false;
   bool temErro = false;
+  bool flag = false;
+
+  StreamSubscription streamSubscription;
+
+  List<DocumentSnapshot> todosProductos = [];
+
+  CollectionReference collectionReference =
+      FirebaseFirestore.instance.collection("produtos");
 
   void iniciarFireBase() async {
     try {
@@ -36,10 +46,40 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  carregarFeed(UserModel userModel) {
+    collectionReference.snapshots().listen((event) {
+      setState(() {
+        event.docs.forEach((element) {
+          element.reference.collection("items").snapshots().listen((event) {
+            event.docs.forEach((element) {
+              FirebaseFirestore.instance
+                  .doc("users")
+                  .collection(userModel.meu_user.uid)
+                  .doc("feeds")
+                  .set({"feeds": event.docs});
+            });
+          });
+        });
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     iniciarFireBase();
+
+    streamSubscription = collectionReference.snapshots().listen((event) {
+      setState(() {
+        event.docs.forEach((element) {
+          element.reference.collection("items").snapshots().listen((event) {
+            event.docs.forEach((element) {
+              todosProductos.add(element);
+            });
+          });
+        });
+      });
+    });
   }
 
   @override
@@ -51,6 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return ScopedModelDescendant<UserModel>(builder: (context, child, model) {
       String endereco = model.userData["endereco"];
       if (model.estaCarregando) {
+        flag = false;
         return Scaffold(
           body: Center(child: CircularProgressIndicator()),
         );
@@ -109,7 +150,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        height: size.height / 4,
                         padding: EdgeInsets.only(left: 8, right: 8),
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
@@ -137,14 +177,44 @@ class _MyHomePageState extends State<MyHomePage> {
                           },
                         ),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 15),
                       //build category list
+
+                      Padding(
+                          padding: EdgeInsets.only(left: 8, right: 8),
+                          child: Text("Categorias",
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold))),
+
+                      _buildBody(context, size),
+
+                      SizedBox(height: 15),
+
+                      Padding(
+                          padding: EdgeInsets.only(left: 8, right: 8),
+                          child: Text("Para si",
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold))),
+                      SizedBox(height: 15),
                       Expanded(
-                        child: Container(
-                            height: size.height / 4,
-                            padding: EdgeInsets.only(left: 8, right: 8),
-                            child: _buildBody(context, size)),
-                      )
+                          child: Container(
+                        child: GridView.builder(
+                            itemCount: todosProductos.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 2.0,
+                                    crossAxisSpacing: 2.0,
+                                    childAspectRatio: 0.65),
+                            itemBuilder: (context, index) {
+                              return ProdutoTile((Produto.fromsnapshot(
+                                  todosProductos[index])));
+                            }),
+                      ))
                     ],
                   ),
                 ))
@@ -162,7 +232,7 @@ Widget _buildBody(BuildContext context, Size size) {
   var or = MediaQuery.of(context).orientation;
   return Container(
     padding: EdgeInsets.zero,
-    height: or == Orientation.portrait ? size.height : 500,
+    height: or == Orientation.landscape ? size.height : null,
     width: size.width,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,34 +245,14 @@ Widget _buildBody(BuildContext context, Size size) {
               return Container(
                   alignment: Alignment.center,
                   child: CircularProgressIndicator());
-
             return Container(
-              height: 200,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Categorias",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold)),
                   Container(
                     height: 110,
                     child: _buildListCategory(context, snapshot.data.docs),
                   ),
-                  Text("Para si",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold)),
-                  Expanded(
-                      child: Container(
-                    child: ListView(
-                      children: [
-                        ProdutoTile(Produto())
-                      ],
-                    ),
-                  ))
                 ],
               ),
             );
