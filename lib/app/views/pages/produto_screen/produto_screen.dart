@@ -11,7 +11,7 @@ class ProdutoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(snapshot.data()['titulo']),
+          title: Text((snapshot.data() as Map<String, dynamic>)['titulo']),
         ),
         body: FutureBuilder<QuerySnapshot>(
           future: FirebaseFirestore.instance

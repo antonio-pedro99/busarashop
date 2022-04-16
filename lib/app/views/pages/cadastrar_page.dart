@@ -2,7 +2,6 @@ import 'package:baby_names/app/models/scopedmodels/user_model.dart';
 import 'package:baby_names/app/models/user.dart';
 import 'package:baby_names/app/views/custom/btn_log.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class SigInPage extends StatefulWidget {
@@ -22,7 +21,7 @@ class _SigInPageState extends State<SigInPage> {
 
   String endereco = "";
 
-  Position _currentPosition;
+
 
   Widget _buildBack() {
     return Image.asset('assets/bg.jpg');
