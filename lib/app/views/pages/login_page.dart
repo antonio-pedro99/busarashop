@@ -21,7 +21,7 @@ class _PageLoginState extends State<PageLogin> {
 
   void onFail() {
     setState(() {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.red,
         content: Text("Erro ao entrar"),
         duration: Duration(seconds: 2),
@@ -64,9 +64,11 @@ class _PageLoginState extends State<PageLogin> {
                               TextFormField(
                                 controller: emailController,
                                 validator: (text) {
+                                  String msg = "";
                                   if (text.isEmpty || !text.contains("@")) {
-                                    return "Email inválido!";
+                                    msg = "Email inválido!";
                                   }
+                                  return msg;
                                 },
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
@@ -90,9 +92,11 @@ class _PageLoginState extends State<PageLogin> {
                                 controller: senhaController,
                                 obscureText: true,
                                 validator: (text) {
+                                  String msg = "";
                                   if (text.isEmpty || text.length < 6) {
-                                    return "Senha inválida";
+                                    msg = "Senha inválida";
                                   }
+                                  return msg;
                                 },
                                 decoration: InputDecoration(
                                     prefixIcon: Icon(
