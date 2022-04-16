@@ -14,8 +14,8 @@ class CartProduto {
 
   CartProduto.fromDocument(DocumentSnapshot snapshot) {
     pid = snapshot.id.toString();
-    categoria = (snapshot.data())["categoria"];
-    peso = (snapshot.data())["peso"];
+    categoria = (snapshot.data() as Map<String, dynamic>)["categoria"];
+    peso = (snapshot.data() as Map<String, dynamic>)["peso"];
   }
 
   Map<String, dynamic> toMap() {
