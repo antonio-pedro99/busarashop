@@ -8,6 +8,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.2"
+<<<<<<< Updated upstream
   badges:
     dependency: transitive
     description:
@@ -15,6 +16,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+=======
+>>>>>>> Stashed changes
   boolean_selector:
     dependency: transitive
     description:
@@ -85,6 +88,16 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
+<<<<<<< Updated upstream
+=======
+  convert:
+    dependency: transitive
+    description:
+      name: convert
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1"
+>>>>>>> Stashed changes
   crypto:
     dependency: transitive
     description:
@@ -512,5 +525,10 @@ packages:
     source: hosted
     version: "0.2.0+1"
 sdks:
+<<<<<<< Updated upstream
   dart: ">=2.15.0 <3.0.0"
   flutter: ">=2.10.0-0"
+=======
+  dart: ">=2.14.0 <3.0.0"
+  flutter: ">=1.17.0"
+>>>>>>> Stashed changes

@@ -21,15 +21,13 @@ class _SigInPageState extends State<SigInPage> {
 
   String endereco = "";
 
-
-
   Widget _buildBack() {
     return Image.asset('assets/bg.jpg');
   }
 
   void onFail() {
     setState(() {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.red,
         content: Text("Erro ao criar"),
         duration: Duration(seconds: 2),
@@ -38,7 +36,7 @@ class _SigInPageState extends State<SigInPage> {
   }
 
   void onSucess() {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Theme.of(context).primaryColor,
       content: Text("Seja bem vindo!"),
       duration: Duration(seconds: 2),
@@ -83,6 +81,7 @@ class _SigInPageState extends State<SigInPage> {
                           if (str.isEmpty || str.contains(RegExp(r'[0-9]'))) {
                             return "Nome inválido";
                           }
+                          return "";
                         },
                         decoration: InputDecoration(
                             prefixIcon: Icon(
@@ -108,6 +107,7 @@ class _SigInPageState extends State<SigInPage> {
                           if (text.isEmpty || !text.contains("@")) {
                             return "Email inválido!";
                           }
+                          return "";
                         },
                         decoration: InputDecoration(
                             prefixIcon: Icon(
@@ -133,6 +133,7 @@ class _SigInPageState extends State<SigInPage> {
                           } else if (str.length < 10) {
                             return "Escreva um endereço completo";
                           }
+                          return "";
                         },
                         controller: enderecoController,
                         decoration: InputDecoration(
@@ -162,6 +163,7 @@ class _SigInPageState extends State<SigInPage> {
                           if (str.isEmpty) {
                             return "Campo obrigatório";
                           }
+                          return "";
                         },
                         decoration: InputDecoration(
                             prefixIcon: Icon(
@@ -187,6 +189,7 @@ class _SigInPageState extends State<SigInPage> {
                           if (str.length < 6 || str.isEmpty) {
                             return "Senha inválida(A senha deve ter no mínimo 6 caracteres)";
                           }
+                          return "";
                         },
                         decoration: InputDecoration(
                             prefixIcon: Icon(
