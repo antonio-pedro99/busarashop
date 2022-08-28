@@ -67,6 +67,7 @@ class UserModel extends Model {
         .then((user) async {
       meu_user = user.user;
 
+      print(user.credential.asMap());
       if (user != null) {
         _salvaLogin();
       }

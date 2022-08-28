@@ -14,7 +14,7 @@ class Usuario {
       'email': email,
       'endereco': endereco,
       'contacto': contacto,
-      'metodo_pagamento': metodoPagamento,
+      'metodo_pagamento': ["Pagamento na Entrega", "Transferência"],
       'saldo': saldo
     };
   }

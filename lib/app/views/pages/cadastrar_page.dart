@@ -81,7 +81,7 @@ class _SigInPageState extends State<SigInPage> {
                           if (str.isEmpty || str.contains(RegExp(r'[0-9]'))) {
                             return "Nome inválido";
                           }
-                          return "";
+                          return null;
                         },
                         decoration: InputDecoration(
                             prefixIcon: Icon(
@@ -107,7 +107,7 @@ class _SigInPageState extends State<SigInPage> {
                           if (text.isEmpty || !text.contains("@")) {
                             return "Email inválido!";
                           }
-                          return "";
+                          return null;
                         },
                         decoration: InputDecoration(
                             prefixIcon: Icon(
@@ -133,7 +133,7 @@ class _SigInPageState extends State<SigInPage> {
                           } else if (str.length < 10) {
                             return "Escreva um endereço completo";
                           }
-                          return "";
+                          return null;
                         },
                         controller: enderecoController,
                         decoration: InputDecoration(
@@ -163,7 +163,7 @@ class _SigInPageState extends State<SigInPage> {
                           if (str.isEmpty) {
                             return "Campo obrigatório";
                           }
-                          return "";
+                          return null;
                         },
                         decoration: InputDecoration(
                             prefixIcon: Icon(
@@ -189,7 +189,7 @@ class _SigInPageState extends State<SigInPage> {
                           if (str.length < 6 || str.isEmpty) {
                             return "Senha inválida(A senha deve ter no mínimo 6 caracteres)";
                           }
-                          return "";
+                          return null;
                         },
                         decoration: InputDecoration(
                             prefixIcon: Icon(
@@ -223,7 +223,7 @@ class _SigInPageState extends State<SigInPage> {
                             userData.email = emailController.text;
                             userData.endereco = enderecoController.text;
                             userData.contacto = contactosController.text;
-                            userData.metodoPagamento = pagamentos_metodo;
+                            //userData.metodoPagamento = pagamentos_metodo;
 
                             model.criarConta(
                                 userData: userData.toMap(),

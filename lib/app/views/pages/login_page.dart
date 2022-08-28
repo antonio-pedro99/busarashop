@@ -63,12 +63,11 @@ class _PageLoginState extends State<PageLogin> {
                             children: [
                               TextFormField(
                                 controller: emailController,
-                                validator: (text) {
-                                  String msg = "";
-                                  if (text.isEmpty || !text.contains("@")) {
-                                    msg = "Email inválido!";
+                                validator: (str) {
+                                  if (str.isEmpty || !str.contains("@")) {
+                                    return "This cannot be an empty field.";
                                   }
-                                  return msg;
+                                  return null;
                                 },
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
@@ -92,11 +91,10 @@ class _PageLoginState extends State<PageLogin> {
                                 controller: senhaController,
                                 obscureText: true,
                                 validator: (text) {
-                                  String msg = "";
                                   if (text.isEmpty || text.length < 6) {
-                                    msg = "Senha inválida";
+                                    return "Senha inválida";
                                   }
-                                  return msg;
+                                  return null;
                                 },
                                 decoration: InputDecoration(
                                     prefixIcon: Icon(
@@ -118,7 +116,7 @@ class _PageLoginState extends State<PageLogin> {
                               InkWell(
                                 onTap: () {
                                   if (_formkey.currentState.validate()) {
-                                    model.verificar();
+                                    // model.verificar();
                                     model.fazerLogin(
                                         senha: senhaController.text,
                                         email: emailController.text,
