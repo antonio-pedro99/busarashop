@@ -9,6 +9,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../produto_screen/produto_screen.dart';
@@ -97,6 +98,13 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       } else {
         return Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            toolbarHeight: 0,
+            systemOverlayStyle: const SystemUiOverlayStyle(
+                statusBarBrightness: Brightness.light,
+                statusBarIconBrightness: Brightness.light),
+          ),
           body: CustomScrollView(
             slivers: [
               SliverAppBar(
